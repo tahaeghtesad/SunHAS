@@ -1,0 +1,28 @@
+{
+  "name": "sun-home-automation-system",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "subpkg run start"
+  },
+  "subPackages": [
+    "HASAE",
+    "HASConnector",
+    "HASHub"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tahaeghtesad/SunHAS.git"
+  },
+  "author": "Taha Eghtesad",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tahaeghtesad/SunHAS/issues"
+  },
+  "homepage": "https://github.com/tahaeghtesad/SunHAS#readme",
+  "devDependencies": {
+    "subpackage": "^1.0.0"
+  }
+}
