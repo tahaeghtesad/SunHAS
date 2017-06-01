@@ -8,5 +8,8 @@
     "start": "node main.js"
   },
   "author": "Taha Eghtesad",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "mongoose": "^4.10.4"
+  }
 }
