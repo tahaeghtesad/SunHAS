@@ -15,13 +15,15 @@ server.on('message', (msg, rinfo) => {
 
     let target = msg.readUInt32BE(0);
     let sender = msg.readUInt32BE(4);
-    let message = msg.slice(8);
+    let code = msg[8];
+    let message = msg.slice(9);
     new logs({
         sender: sender,
         target: target,
         msg: message
     }).save();
     console.log(`server got: "${message}" from $(sender) to ${target}`);
+
 });
 
 server.on('listening', () => {
@@ -44,6 +46,12 @@ espserver.on('message', (msg, rinfo) => {
         target: target,
         msg: message
     }).save();
+    //
+    // console.log(`received: ${JSON.stringify({
+    //     sender: sender,
+    //     target: target,
+    //     msg: message
+    // }, null, 4)}`);
 
     messageParser(message, sender);
 });

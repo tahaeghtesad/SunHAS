@@ -5,14 +5,15 @@ const mongoose = require('./db-connection');
 const Schema = mongoose.Schema;
 const agentModel = mongoose.model('agent', new Schema(
     {
-        cid: {type: Number, unique: true},
+        cid: Number,//{type: Number, unique: true},
         ip: String,
         ancestor: Number,
         functions: [Number],
         location: { type: Schema.ObjectId, ref: 'location' },
         description: String,
-        infos: [{agentKey: Number, value: Number, time: Date}],
-        states: [{agentKey: Number, value: Number}],
+        infos: [{number: Number, agentKey: Number, value: Number, time: Date}],
+        states: [{number: Number, agentKey: Number, value: Number}],
+        errors: [{errorCode: Number, cause: String, time: Date}]
     }, { timestamps: { createdAt: 'created_at' } }));
 
 const locationModel = mongoose.model('location', new Schema(
