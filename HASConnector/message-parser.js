@@ -8,27 +8,29 @@ const agentModel = require('./models').agentModel;
 
 const MessageCode = require('./models').MessageCode;
 
-function messageParser(msg, src){
+function messageParser(msg, src, ip){
     let code = msg[0];
     switch(code){
         case MessageCode.Keep_Alive:
-            keepAlive(msg.slice(1), src);
+            keepAlive(msg.slice(1), src, ip);
             break;
         case MessageCode.Info:
             info(msg.slice(1), src);
             break;
         case MessageCode.ChangedState:
+            state(msg.slice(1), src);
             break;
     }
 }
 
-function keepAlive(msg, src){
+function keepAlive(msg, src, ip){
     functions = [];
     for (let i = 8; i < msg.length; i++)
         functions.push(msg[i]);
     let newState = {
         cid: src,
         ip: `${msg[0]}.${msg[1]}.${msg[2]}.${msg[3]}`,
+        routerIp: ip,
         ancestor: msg.readUInt32BE(4),
         functions: functions
     };

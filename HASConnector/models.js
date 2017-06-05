@@ -7,6 +7,7 @@ const agentModel = mongoose.model('agent', new Schema(
     {
         cid: Number,//{type: Number, unique: true},
         ip: String,
+        routerIp: String,
         ancestor: Number,
         functions: [Number],
         location: { type: Schema.ObjectId, ref: 'location' },

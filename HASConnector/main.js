@@ -22,7 +22,7 @@ server.on('message', (msg, rinfo) => {
         target: target,
         msg: message
     }).save();
-    console.log(`server got: "${message}" from $(sender) to ${target}`);
+    console.log(`server got: "${message}" from ${sender} to ${target}`);
 
 });
 
@@ -39,11 +39,13 @@ espserver.on('listening', () => {
 espserver.on('message', (msg, rinfo) => {
     let target = msg.readUInt32BE(0);
     let sender = msg.readUInt32BE(4);
-    let message = msg.slice(8);
+    let code = msg[8];
+    let message = msg.slice(9);
 
     new logs({
         sender: sender,
         target: target,
+        code: code,
         msg: message
     }).save();
     //
@@ -53,7 +55,7 @@ espserver.on('message', (msg, rinfo) => {
     //     msg: message
     // }, null, 4)}`);
 
-    messageParser(message, sender);
+    messageParser(message, sender, rinfo.address);
 });
 
 server.bind(7071);
