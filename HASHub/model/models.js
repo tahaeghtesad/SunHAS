@@ -1,7 +1,7 @@
 /**
  * Created by tahae on 5/31/2017.
  */
-const mongoose = require('./db-connection');
+const mongoose = require('../infrastructure/db-connection');
 const Schema = mongoose.Schema;
 const agentModel = mongoose.model('agent', new Schema(
     {

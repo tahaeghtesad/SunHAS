@@ -80,7 +80,7 @@ function error(msg, src){
     let agent = agentModel.findOne({cid: src}).exec((err, agent) => {
         let code = msg[0];
         let cause = msg.slice(1).toString();
-        agent.errors.push({errorCode: code, cause: cause, time: Date.now()});
+        agent.failures.push({errorCode: code, cause: cause, time: Date.now()});
         agent.save((err) => {
             if (err)
                 console.error(err);
