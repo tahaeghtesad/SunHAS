@@ -4,7 +4,7 @@
 
 const mongoose = require('./db-connection').mongoose;
 
-const agentModel = require('./models').agentModel;
+const chipModel = require('./models').chipModel;
 
 const MessageCode = require('./models').MessageCode;
 
@@ -18,64 +18,64 @@ function messageParser(msg, src, ip){
             info(msg.slice(1), src);
             break;
         case MessageCode.ChangedState:
-            state(msg.slice(1), src);
+            info(msg.slice(1), src);
             break;
     }
 }
 
 function keepAlive(msg, src, ip){
-    functions = [];
-    for (let i = 8; i < msg.length; i++)
-        functions.push(msg[i]);
+    actuators = [];
+    for (let i = 8; i < msg.length; i+=2)
+        actuators.push({
+            actuatorKey: msg[i],
+            function_: msg[i+1]
+        });
     let newState = {
         cid: src,
         ip: `${msg[0]}.${msg[1]}.${msg[2]}.${msg[3]}`,
         routerIp: ip,
         ancestor: msg.readUInt32BE(4),
-        functions: functions
+        actuators: actuators
     };
-    agentModel.update({cid: src}, newState, (err,ar) => {
-        if (err)
-            console.error(err);
-        else if (ar.n === 0)
-            new agentModel(newState).save((err) => {
-                if (err)
-                    console.error(err);
-            });
+
+    let chip = chipModel.findOne({cid: src}).exec((err, chip) => {
+        if (chip){
+            chip.cid = src;
+            chip.ip = `${msg[0]}.${msg[1]}.${msg[2]}.${msg[3]}`;
+            chip.routerIp = ip;
+            chip.ancestor = msg.readUInt32BE(4);
+            chip.save();
+        } else {
+            new chipModel(newState).save();
+        }
     });
 }
+
 function info(msg, src){
-    let agent = agentModel.findOne({cid: src}).exec((err, agent) => {
-        for(let i = 0; i < msg.length/6; i++){
-            let number = msg[i*5];
-            let key = msg[i * 5 + 1];
-            let value = msg.readFloatBE(i * 5 + 2);
-            agent.infos.push({number: number, agentKey: key, value: value, time: Date.now()});
+    let actuatorsInfo = [];
+    let actuators = [];
+    for(let i = 0; i < msg.length/5; i++){
+        let actuatorKey = msg[i*5];
+        let value = msg.readFloatBE(i * 5 + 1);
+        actuatorsInfo[actuatorKey] = value;
+        actuators.push(actuatorKey);
+    }
+
+    chipModel.findOne({cid: src}).populate({
+        path: 'actuators',
+        match: {
+            actuatorKey : {$in: actuators}
         }
-        agent.save((err) => {
-            if (err)
-                console.error(err);
-        });
+    }).exec((err, chip) => {
+        for (let i = 0; i < chip.actuators.length; i++){
+            chip.actuators[i].states.push({
+                value: actuatorsInfo[chip.actuators[i].actuatorKey],
+                time: Date.now()
+            });
+        }
     });
 }
-function state(msg, src){
-    let agent = agentModel.findOne({cid: src}).exec((err, agent) => {
-        for(let i = 0; i < msg.length/5; i++){
-            let number = msg[i * 5];
-            let key = msg[i * 5 + 1];
-            let value = msg.readFloatBE(i * 5 + 2);
-            for (let j = 0; j < agent.states.length; i++)
-                if (agent.states[j].agentKey === key && agent.states[j].number === number) {
-                    agent.states[j].value = value;
-                    break;
-                }
-        }
-        agent.save((err) => {
-            if (err)
-                console.error(err);
-        });
-    });
-}
+
 function error(msg, src){
     let agent = agentModel.findOne({cid: src}).exec((err, agent) => {
         let code = msg[0];

@@ -20,6 +20,7 @@ router.get('/:locationId', (req, res, next) => {
 });
 
 router.post('/:locationId', (req, res, next) => {
+    //todo refactor this
     models.locationModel.findOne({_id: req.params.locationId}, (err, location) => {
         location.name = req.body.name;
         location.save((err) => {
@@ -42,6 +43,7 @@ router.delete('/:locationId', (req, res, next) => {
 });
 
 router.put('/', (req, res, next) => {
+    //todo refactor this
     let model = new models.locationModel({
         name: req.body.name
     });

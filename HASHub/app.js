@@ -4,6 +4,8 @@ const favicon = require('serve-favicon');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
+const agenda = require('./infrastructure/agenda');
+const Agendash = require('agendash');
 
 const index = require('./routes/index');
 const node = require('./routes/node');
@@ -31,6 +33,7 @@ app.use('/location', location);
 app.use('/rule', rule);
 app.use('/action', action);
 
+app.use('/agendash', Agendash(agenda));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

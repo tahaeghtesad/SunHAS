@@ -21,6 +21,7 @@ router.get('/:nodeId', (req, res, next) => {
 });
 
 router.post('/:nodeId', (req, res, next) => {
+    //todo refactor this
     models.agentModel.findOne({cid: req.params.nodeId}, (err, agent) => {
         agent.location._id = req.body.location;
         agent.description = req.body.description;
@@ -32,5 +33,7 @@ router.post('/:nodeId', (req, res, next) => {
         }));
     });
 });
+
+//todo add crud for actuators
 
 module.exports = router;
