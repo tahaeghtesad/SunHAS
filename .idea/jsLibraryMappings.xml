@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="JavaScriptLibraryMappings">
-    <includedPredefinedLibrary name="Node.js Core" />
+    <file url="file://$PROJECT_DIR$" libraries="{Node.js Core}" />
+    <file url="file://$PROJECT_DIR$/HASAE" libraries="{Node.js Core}" />
+    <file url="file://$PROJECT_DIR$/HASConnector" libraries="{Node.js Core}" />
+    <file url="file://$PROJECT_DIR$/HASHub" libraries="{Node.js Core}" />
     <excludedPredefinedLibrary name="HTML" />
   </component>
 </project>

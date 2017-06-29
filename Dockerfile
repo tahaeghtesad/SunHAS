@@ -9,7 +9,6 @@ RUN apt-get update && apt-get install -y mongodb-org
 RUN mkdir -p /data/db
 
 EXPOSE 27017
-ENTRYPOINT ["/usr/bin/mongod"]
 
 RUN apt-get install curl
 RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
@@ -17,10 +16,8 @@ RUN apt-get install nodejs -y
 
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
-COPY package.json /usr/src/app
-RUN npm install
 COPY . /usr/src/app
-RUN npm run install
+RUN npm install
 
 EXPOSE 3000
 EXPOSE 8266/udp
