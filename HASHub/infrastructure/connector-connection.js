@@ -6,7 +6,7 @@ const server = dgram.createSocket('udp4');
 const model = require('../model/models');
 
 module.exports = {
-    setState: (chip, actuator, value) => {
+    setState: (chip, routerIp, actuator, value) => {
         let buffer = Buffer.alloc(14);
         buffer.writeInt32BE(chip, 0);
         buffer.writeInt32BE(0, 4);
@@ -14,6 +14,7 @@ module.exports = {
         buffer[9] = actuator;
         buffer.writeFloatBE(value, 10);
         server.send(buffer, 0, buffer.length, 7071, 'localhost');
+        console.log(`setting state for ${actuator} in ${chip} with value of ${value}`);
     },
     setTime: (chip) => {
         let buffer = Buffer.alloc(13);

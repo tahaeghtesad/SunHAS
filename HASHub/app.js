@@ -12,6 +12,7 @@ const location = require('./routes/location');
 const rule = require('./routes/rule');
 const action = require('./routes/action');
 const actuator = require('./routes/actuator');
+const chip= require('./routes/chip');
 
 const app = express();
 
@@ -32,6 +33,7 @@ app.use('/location', location);
 app.use('/rule', rule);
 app.use('/action', action);
 app.use('/actuator', actuator);
+app.use('/chip', chip);
 
 app.use('/agendash', Agendash(agenda));
 

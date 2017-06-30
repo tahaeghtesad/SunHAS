@@ -8,7 +8,7 @@ const mongoose = require('../infrastructure/db-connection');
 const models = require('../model/models');
 
 router.get('/', (req,res,next) => {
-   models.locationModel.find({}).exec((err, locations) => {
+   models.locationModel.find({}, '_id').exec((err, locations) => {
        if (err)
            res.send({code: 500, description: err.message});
        else

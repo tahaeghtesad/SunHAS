@@ -7,7 +7,7 @@ const router = express.Router();
 const models = require('../model/models');
 
 router.get('/', (req,res,next) => {
-    models.actuatorModel.find({}).exec((err, actuators) => {
+    models.actuatorModel.find({}, '_id').exec((err, actuators) => {
         if (err)
             res.send({code: 500, description: err});
         else
@@ -24,19 +24,32 @@ router.get('/:actuatorId', (req,res,next) => {
     });
 });
 
-router.post('/:actuatorId', (req,res,next) => {
+router.put('/:actuatorId', (req,res,next) => {
     models.actuatorModel.find({_id: req.params.actuatorId}).exec((err, actuator) => {
         if (err)
             res.send({code: 500, description: err.message});
         else {
             actuator.location = req.body.location;
             actuator.description= req.body.description;
-            actuator.save((err) => {
-                if (err)
-                    res.send({code: 500, description: err.message});
-                else
-                    res.send(actuator);
-            })
+            if (!location)
+                location = actuator.location;
+            if (!description)
+                description = actuator.description;
+
+            models.locationModel.findOne({_id: req.body.location}).exec((err,location) => {
+                if (location){
+                    location.actuator.push(actuator);
+                    location.save();
+                    actuator.save((err) => {
+                        if (err)
+                            res.send({code: 500, description: err.message});
+                        else
+                            res.send(actuator);
+                    });
+                } else {
+                    res.send({code: 500, description: 'location not found.'});
+                }
+            });
         }
     });
 });

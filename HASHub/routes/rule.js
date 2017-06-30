@@ -11,9 +11,8 @@ const agenda = require('../infrastructure/agenda');
 
 
 /**
- * * * * * *
- | | | | | |
- | | | | | +-- Year              (range: 1900-3000)
+ * * * * *
+ | | | | |
  | | | | +---- Day of the Week   (range: 1-7, 1 standing for Monday)
  | | | +------ Month of the Year (range: 1-12)
  | | +-------- Day of the Month  (range: 1-31)
@@ -37,6 +36,7 @@ router.post('/', (req,res,next) => {
     let actuator = req.body.actuator;
     let value = req.body.value;
 
+    console.log(`${name} ${cron} ${actuator} ${value}`);
 
     models.actuatorModel.findOne({ _id: actuator }).populate('chip').exec((err, actuator) => {
         if (err)
@@ -47,17 +47,21 @@ router.post('/', (req,res,next) => {
             agenda.define(name, (job, done) => {
                 connector.setState(
                     job.attrs.data.chip,//actuator.chip.cid,
+                    job.attrs.data.routerIp,
                     job.attrs.data.actuator,//actuator._id,
                     job.attrs.data.value //value
                 );
                 done();
             });
 
-            agenda.every(cron, name, {
+            let job = agenda.every(cron, name, {
                 chip: actuator.chip.cid,
+                routerIp: actuator.chip.routerIp,
                 actuator: actuator._id,
                 value: value
             });
+
+            res.send(job);
         }
     });
 });
