@@ -5,7 +5,7 @@ const mongoose = require('../infrastructure/db-connection');
 const Schema = mongoose.Schema;
 const chipModel = mongoose.model('chip', new Schema(
     {
-        cid: Number,//{type: Number, unique: true},
+        cid: {type: Number, unique: true},
         ip: String,
         routerIp: String,
         ancestor: Number,

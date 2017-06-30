@@ -9,7 +9,8 @@ const mongoose = require('./db-connection');
 
 const messageParser = require('./message-parser');
 
-const logs = require('./models').logModel;
+const models = require('./models');
+const logs = models.logModel;
 
 server.on('message', (msg, rinfo) => {
 
@@ -20,10 +21,18 @@ server.on('message', (msg, rinfo) => {
     new logs({
         sender: sender,
         target: target,
+        code: code,
         msg: message
     }).save();
     console.log(`server got: "${message}" from ${sender} to ${target}`);
-    //TODO implement this
+
+    models.chipModel.findOne({cid: target}).exec((err, chip) => {
+        if (err)
+            console.error(err);
+        else
+            espserver.send(msg, 0, msg.length, 8266, chip.routerIp);
+    });
+
 });
 
 server.on('listening', () => {

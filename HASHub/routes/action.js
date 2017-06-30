@@ -12,6 +12,8 @@ router.get('/:actuatorId/:value', (req, res, next) => {
     models.actuatorModel.findOne({ _id: req.params.actuatorId }).populate('chip').exec((err, actuator) => {
        if (err)
            res.send({code: 500, description: err});
+       else if (require('../model/helpers').isSensor(actuator.Function))
+           res.send({code: 500, description: 'not an actuator'});
        else
            connector.setState(
                actuator.chip.cid,

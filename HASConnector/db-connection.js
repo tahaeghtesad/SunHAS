@@ -4,7 +4,7 @@
 const mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
 
-mongoose.connect('mongodb://localhost/has', { useMongoClient: true }).then(
+mongoose.connect('mongodb://localhost/has', { useMongoClient: false }).then(
     () => { console.log('connected to database'); },
     err => { console.error('error connecting to database', err); }
 );

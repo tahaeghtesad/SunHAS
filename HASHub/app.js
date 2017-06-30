@@ -8,10 +8,10 @@ const agenda = require('./infrastructure/agenda');
 const Agendash = require('agendash');
 
 const index = require('./routes/index');
-const node = require('./routes/node');
 const location = require('./routes/location');
 const rule = require('./routes/rule');
 const action = require('./routes/action');
+const actuator = require('./routes/actuator');
 
 const app = express();
 
@@ -28,10 +28,10 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
-app.use('/node', node);
 app.use('/location', location);
 app.use('/rule', rule);
 app.use('/action', action);
+app.use('/actuator', actuator);
 
 app.use('/agendash', Agendash(agenda));
 

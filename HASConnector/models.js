@@ -36,6 +36,7 @@ const logModel = mongoose.model('log', new Schema(
     {
         sender: Number,
         target: Number,
+        code: Number,
         msg: String,
     }, { timestamps: { createdAt: 'created_at' } }));
 
