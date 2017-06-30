@@ -7,53 +7,61 @@ const router = express.Router();
 const mongoose = require('../infrastructure/db-connection');
 const models = require('../model/models');
 
-router.get('/',  (req, res, next) => {
-    models.locationModel.find({}, (err, locations) => {
-        res.send(locations);
-    });
+router.get('/', (req,res,next) => {
+   models.locationModel.find({}).exec((err, locations) => {
+       if (err)
+           res.send({code: 500, description: err});
+       else
+           res.send(locations);
+   });
 });
 
-router.get('/:locationId', (req, res, next) => {
-    models.locationModel.findOne({_id: req.params.locationId}, (err, location) => {
-        res.send(location);
-    });
+router.post('/', (req,res,next) => {
+   new models.locationModel({
+       name: req.body.name,
+       description: req.body.description,
+       parent: req.body.parent
+   }).save((err) => {
+       if (err)
+           res.send({code: 500, description: err});
+       else
+           res.send(this);
+   });
 });
 
-router.post('/:locationId', (req, res, next) => {
-    //todo refactor this
-    models.locationModel.findOne({_id: req.params.locationId}, (err, location) => {
-        location.name = req.body.name;
-        location.save((err) => {
-            if (err)
-                res.send({code: 502, description: 'update failed.'});
-            else
-                res.send(location);
-        });
-    });
-});
-
-router.delete('/:locationId', (req, res, next) => {
-    models.locationModel.findOne({_id: req.params.locationId}, (err, location) => {
-        location.remove((err) => {
-            if (err)
-                res.send({code: 503, description: 'remove failed.'})
-            res.send({code: 200, description: 'removed.'})
-        });
-    });
-});
-
-router.put('/', (req, res, next) => {
-    //todo refactor this
-    let model = new models.locationModel({
-        name: req.body.name
-    });
-
-    model.save((err) => {
+router.get('/:locationId', (req,res,next) => {
+    models.locationModel.find({ _id: req.params.locationId }).exec((err, location) => {
         if (err)
-            res.send({code: 501, description: 'create failed.'});
+            res.send({code: 500, description: err});
         else
-            res.send(model);
+            res.send(location);
     });
+});
+
+router.put('/:locationId', (req,res,next) => {
+    models.locationModel.find({ _id: req.params.locationId }).exec((err, location) => {
+        if (err)
+            res.send({code: 500, description: err});
+        else {
+            location.name = req.body.name;
+            location.description = req.body.description;
+            location.parent = req.body.parent;
+            location.save((err) => {
+               if (err)
+                   res.send( {code: 500, description: err} );
+               else
+                   res.send(location);
+            });
+        }
+    });
+});
+
+router.delete('/:locationId', (req,res,next) => {
+    models.locationModel.remove({ _id: req.params.locationId }, (err) => {
+        if (err)
+            res.send({code: 500, description: err});
+        res.send({code: 200, description: 'removed'});
+    })
 });
 
 module.exports = router;

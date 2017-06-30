@@ -20,7 +20,8 @@ const actuatorModel = mongoose.model('actuator', new Schema(
         chip: { type: Schema.ObjectId, ref: 'chip'},
         location: { type: Schema.ObjectId, ref: 'location'},
 
-        states: [{ value: Number, time: Date }]
+        states: [{ value: Number, time: Date }],
+        description: String
 
     }, { timestamps: { createdAt: 'created_at' } }));
 

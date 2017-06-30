@@ -23,7 +23,7 @@ server.on('message', (msg, rinfo) => {
         msg: message
     }).save();
     console.log(`server got: "${message}" from ${sender} to ${target}`);
-
+    //TODO implement this
 });
 
 server.on('listening', () => {
