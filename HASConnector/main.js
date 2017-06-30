@@ -57,14 +57,15 @@ espserver.on('message', (msg, rinfo) => {
         code: code,
         msg: message
     }).save();
-    //
+
     // console.log(`received: ${JSON.stringify({
     //     sender: sender,
     //     target: target,
+    //     code: code,
     //     msg: message
     // }, null, 4)}`);
 
-    messageParser(message, sender, rinfo.address);
+    messageParser(msg.slice(8), sender, rinfo.address);
 });
 
 server.bind(7071);

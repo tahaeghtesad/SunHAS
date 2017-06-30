@@ -7,7 +7,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/cron', (req,res,next) => {
-   res.render('cron', { title: 'cron' });
+    res.render('cron', { title: 'cron' });
 });
 
 module.exports = router;

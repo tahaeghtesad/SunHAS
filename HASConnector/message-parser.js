@@ -4,7 +4,8 @@
 
 const mongoose = require('./db-connection').mongoose;
 
-const chipModel = require('./models').chipModel;
+const model = require('./models');
+const chipModel = model.chipModel;
 
 const MessageCode = require('./models').MessageCode;
 
@@ -34,8 +35,7 @@ function keepAlive(msg, src, ip){
         cid: src,
         ip: `${msg[0]}.${msg[1]}.${msg[2]}.${msg[3]}`,
         routerIp: ip,
-        ancestor: msg.readUInt32BE(4),
-        actuators: actuators
+        ancestor: msg.readUInt32BE(4)
     };
 
     let chip = chipModel.findOne({cid: src}).exec((err, chip) => {
@@ -46,7 +46,17 @@ function keepAlive(msg, src, ip){
             chip.ancestor = msg.readUInt32BE(4);
             chip.save();
         } else {
-            new chipModel(newState).save();
+            let chip = new chipModel(newState);
+            chip.save((err) => {
+                for(let i = 0; i < actuators.length; i++){
+                    actuators[i].chip = chip._id;
+                    let actuator = new model.actuatorModel(actuators[i]);
+                    actuator.save((err) => {
+                        chip.actuators.push(actuator._id);
+                        chip.save();
+                    });
+                }
+            });
         }
     });
 }
@@ -67,11 +77,14 @@ function info(msg, src){
             actuatorKey : {$in: actuators}
         }
     }).exec((err, chip) => {
-        for (let i = 0; i < chip.actuators.length; i++){
-            chip.actuators[i].states.push({
-                value: actuatorsInfo[chip.actuators[i].actuatorKey],
-                time: Date.now()
-            });
+        if (chip) {
+            for (let i = 0; i < chip.actuators.length; i++) {
+                chip.actuators[i].states.push({
+                    value: actuatorsInfo[chip.actuators[i].actuatorKey],
+                    time: Date.now()
+                });
+            }
+            chip.save();
         }
     });
 }
