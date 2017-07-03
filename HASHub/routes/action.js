@@ -40,7 +40,6 @@ router.post('/', (req, res, next) => {
     let location = entities.location ? entities.location.body : '';
     let value = action  === 'turn' ? (entities.on_off.value === 'off' ? 0 : 100) : entities.number.value;
 
-
     console.log(`dimming all lights to ${value}`);
 
     let findCriteria = location === 'all' ? {} : {$text: {$search: location}};
@@ -56,9 +55,10 @@ router.post('/', (req, res, next) => {
                     actuators[i].actuatorKey,
                     value
                 );
-                console.log(`actuator ${actuators[i]._id} dimmed to ${value}`);
             }
-            res.send({code: 200, description: 'done'});
+            let message = `${action}ing ${location} lights ${action === 'turn' ? (value === 0 ? 'off' : 'on') : `to ${value} percent`}`;
+            console.log(message);
+            res.send({code: 200, description: 'done', message: message});
         }
     });
 });

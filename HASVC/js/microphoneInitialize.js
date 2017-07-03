@@ -43,10 +43,10 @@ document.addEventListener('DOMContentLoaded', function (e) {
             method: 'POST',
             data: {
                 response: response
-            },
-            success: function (data) {
-                console.log(data);
             }
+        }).done(function (data) {
+            // console.log(data.message);
+            responsiveVoice.speak(data.message);
         });
     };
     mic.onerror = function (err) {
@@ -79,6 +79,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
 function changeState(s) {
     document.getElementById('current-state').textContent = s;
     mic.setContext({state: s});
+    responsiveVoice.speak('state set to ' + s);
 }
 document.getElementById('state-foo').addEventListener('click', function (e) {
     e.preventDefault();
