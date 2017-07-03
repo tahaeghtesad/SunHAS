@@ -1,0 +1,20 @@
+{
+  "name": "microphone_app",
+  "description": "",
+  "main": "index.js",
+  "authors": [
+    "Taha Eghtesad <tahaeghtesad@gmail.com>"
+  ],
+  "license": "ISC",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^3.2.1"
+  }
+}

@@ -11,7 +11,8 @@
   "subPackages": [
     "HASAE",
     "HASConnector",
-    "HASHub"
+    "HASHub",
+    "HASVC"
   ],
   "repository": {
     "type": "git",

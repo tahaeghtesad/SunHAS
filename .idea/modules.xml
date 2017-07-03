@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/HASConnector/HASConnector.iml" filepath="$PROJECT_DIR$/HASConnector/HASConnector.iml" />
       <module fileurl="file://$PROJECT_DIR$/HASHub/HASHub.iml" filepath="$PROJECT_DIR$/HASHub/HASHub.iml" />
+      <module fileurl="file://$PROJECT_DIR$/HASVC/HASVC.iml" filepath="$PROJECT_DIR$/HASVC/HASVC.iml" />
       <module fileurl="file://$PROJECT_DIR$/SunHAS.iml" filepath="$PROJECT_DIR$/SunHAS.iml" />
     </modules>
   </component>

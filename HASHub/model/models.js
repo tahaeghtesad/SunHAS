@@ -25,13 +25,17 @@ const actuatorModel = mongoose.model('actuator', new Schema(
 
     }, { timestamps: { createdAt: 'created_at' } }));
 
-const locationModel = mongoose.model('location', new Schema(
+const locationSchema = new Schema(
     {
         name: String,
         description: String,
         parent: { type: Schema.ObjectId, ref: 'location' },
-        agents:[{ type: Schema.ObjectId, ref: 'agent' }]
-    }, { timestamps: { createdAt: 'created_at' } }));
+        agents: [{ type: Schema.ObjectId, ref: 'actuator' }]
+    }, { timestamps: { createdAt: 'created_at' } });
+
+locationSchema.index({'name': 'text'});
+
+const locationModel = mongoose.model('location', locationSchema);
 
 const logModel = mongoose.model('log', new Schema(
     {
