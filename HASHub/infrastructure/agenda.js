@@ -3,4 +3,4 @@
  */
 const Agenda = require('agenda');
 
-module.exports = new Agenda({db: {address: 'mongodb://localhost/has'}});
+module.exports = new Agenda({db: {address: 'mongodb://sa:1@ds032887.mlab.com:32887/has'}});

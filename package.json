@@ -9,7 +9,6 @@
     "install": "subpkg install"
   },
   "subPackages": [
-    "HASAE",
     "HASConnector",
     "HASHub",
     "HASVC"
