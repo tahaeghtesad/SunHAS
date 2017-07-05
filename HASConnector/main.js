@@ -4,6 +4,7 @@
 const dgram = require('dgram');
 const server = dgram.createSocket('udp4');
 const espserver = dgram.createSocket('udp4');
+const wifi = require('./wifi-connection');
 
 const mongoose = require('./db-connection');
 
@@ -68,5 +69,16 @@ espserver.on('message', (msg, rinfo) => {
     messageParser(msg.slice(8), sender, rinfo.address);
 });
 
+function sendKeepAlive(ip) {
+    let buffer = Buffer.alloc(9);
+    buffer.writeInt32BE(-1, 0);
+    buffer.writeInt32BE(0, 4);
+    buffer[8] = models.MessageCode.Keep_Alive;
+
+    espserver.send(buffer, 0, buffer.length, 8266, ip);
+}
+
 server.bind(7071);
 espserver.bind(8266);
+
+wifi(sendKeepAlive);
