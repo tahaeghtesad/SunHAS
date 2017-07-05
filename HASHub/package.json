@@ -7,6 +7,7 @@
     "nodemon": "nodemon ./bin/www"
   },
   "dependencies": {
+    "agenda": "^0.9.1",
     "agendash": "^0.4.0",
     "bluebird": "^3.5.0",
     "body-parser": "^1.17.2",
