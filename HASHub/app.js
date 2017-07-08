@@ -27,14 +27,15 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use('/voice', express.static(path.join(__dirname, '../HASVC')));
 
-app.use('/', index);
-app.use('/location', location);
-app.use('/rule', rule);
-app.use('/action', action);
-app.use('/actuator', actuator);
-app.use('/chip', chip);
+app.use('/', express.static(path.join(__dirname, '../HASWeb')));
+
+app.use('/api/', index);
+app.use('/api/location', location);
+app.use('/api/rule', rule);
+app.use('/api/action', action);
+app.use('/api/actuator', actuator);
+app.use('/api/chip', chip);
 
 app.use('/agendash', Agendash(agenda));
 

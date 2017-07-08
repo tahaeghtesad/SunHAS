@@ -13,18 +13,6 @@ const chipModel = mongoose.model('chip', new Schema(
         failures: [{errorCode: Number, cause: String, time: Date}]
     }, { timestamps: { createdAt: 'created_at' } }));
 
-const actuatorModel = mongoose.model('actuator', new Schema(
-    {
-        actuatorKey: Number,
-        function_: Number,
-        chip: { type: Schema.ObjectId, ref: 'chip'},
-        location: { type: Schema.ObjectId, ref: 'location'},
-
-        states: [{ value: Number, time: Date }],
-        description: String
-
-    }, { timestamps: { createdAt: 'created_at' } }));
-
 const locationSchema = new Schema(
     {
         name: String,
@@ -36,6 +24,18 @@ const locationSchema = new Schema(
 locationSchema.index({'name': 'text'});
 
 const locationModel = mongoose.model('location', locationSchema);
+
+const actuatorModel = mongoose.model('actuator', new Schema(
+    {
+        actuatorKey: Number,
+        function_: Number,
+        chip: { type: Schema.ObjectId, ref: 'chip'},
+        location: { type: Schema.ObjectId, ref: 'location'},
+
+        states: [{ value: Number, time: Date }],
+        description: String
+
+    }, { timestamps: { createdAt: 'created_at' } }));
 
 const logModel = mongoose.model('log', new Schema(
     {

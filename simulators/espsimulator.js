@@ -39,7 +39,7 @@ setInterval(() => {
   buffer[17] = 1;
   buffer[18] = 1; //temperature
   buffer[19] = 2;
-  buffer[20] = 4;
+  buffer[20] = 5;
   // console.log(buffer);
 
   socket.send(buffer, 0, buffer.length, 8266, 'localhost');

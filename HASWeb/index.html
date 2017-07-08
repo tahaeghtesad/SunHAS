@@ -1,0 +1,43 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Sun HAS</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/microphone.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="bower_components/moment/moment.js"></script>
+    <script src="bower_components/handlebars/handlebars.min.js"></script>
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="js/handlebarsInitialize.js"></script>
+</head>
+<body>
+<div class="header">
+    <p class="clock" id="clock">
+
+    </p>
+    <div class="TitleAndDevices">
+        <h1>Sun HAS</h1>
+        <span><span id="unassignedDevices">2</span> Unassigned Devices</span>
+    </div>
+    <!--<div id="microphone"></div>-->
+</div>
+<div class="container row" id="locations">
+</div>
+<div class="addNewDevice">
+    <h2>Add a device between these available ones for <span id="newLocation">Bedroom</span></h2>
+    <ul>
+
+    </ul>
+    <img src="icons/add.png" class="closeNewDevice" />
+</div>
+<script src="js/index.js"></script>
+<script src="js/responsiveVoice.min.js"></script>
+<script src="js/microphone.min.js"></script>
+<script src="js/microphoneInitialize.js"></script>
+</body>
+</html>

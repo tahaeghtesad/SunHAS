@@ -63,25 +63,27 @@ function keepAlive(msg, src, ip){
 
 function info(msg, src){
     let actuatorsInfo = [];
-    let actuators = [];
+    console.log(`src\t\t\tactuator\tvalue`);
     for(let i = 0; i < msg.length/5; i++){
         let actuatorKey = msg[i*5];
         let value = msg.readFloatBE(i * 5 + 1);
         actuatorsInfo[actuatorKey] = value;
-        actuators.push(actuatorKey);
+        console.log(`${src}\t${actuatorKey}\t\t\t${value}`);
     }
 
-    chipModel.findOne({cid: src}).populate({
-        path: 'actuators',
-        match: {
-            actuatorKey : {$in: actuators}
-        }
-    }).exec((err, chip) => {
+    console.log(actuatorsInfo);
+
+    chipModel.findOne({cid: src}).exec((err, chip) => {
         if (chip) {
             for (let i = 0; i < chip.actuators.length; i++) {
-                chip.actuators[i].states.push({
-                    value: actuatorsInfo[chip.actuators[i].actuatorKey],
-                    time: Date.now()
+                model.actuatorModel.findById(chip.actuators[i]._id, (err, actuator) => {
+                    if (actuatorsInfo[actuator.actuatorKey]) {
+                        actuator.states.push({
+                            value: actuatorsInfo[actuator.actuatorKey],
+                            time: Date.now()
+                        });
+                        actuator.save();
+                    }
                 });
             }
             chip.save();

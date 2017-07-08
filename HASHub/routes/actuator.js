@@ -7,7 +7,7 @@ const router = express.Router();
 const models = require('../model/models');
 
 router.get('/', (req,res,next) => {
-    models.actuatorModel.find({}, '_id').exec((err, actuators) => {
+    models.actuatorModel.find({}).exec((err, actuators) => {
         if (err)
             res.send({code: 500, description: err});
         else
@@ -25,20 +25,21 @@ router.get('/:actuatorId', (req,res,next) => {
 });
 
 router.put('/:actuatorId', (req,res,next) => {
-    models.actuatorModel.find({_id: req.params.actuatorId}).exec((err, actuator) => {
+    models.actuatorModel.findOne({_id: req.params.actuatorId}).exec((err, actuator) => {
         if (err)
             res.send({code: 500, description: err.message});
         else {
-            actuator.location = req.body.location;
-            actuator.description= req.body.description;
-            if (!location)
-                location = actuator.location;
-            if (!description)
-                description = actuator.description;
+
+            let location = req.body.location;
+            let description= req.body.description;
+            if (location)
+                actuator.location = location;
+            if (description)
+                actuator.description = description;
 
             models.locationModel.findOne({_id: req.body.location}).exec((err,location) => {
                 if (location){
-                    location.actuator.push(actuator);
+                    location.agents.push(actuator._id);
                     location.save();
                     actuator.save((err) => {
                         if (err)
@@ -55,7 +56,7 @@ router.put('/:actuatorId', (req,res,next) => {
 });
 
 router.get('/newActuators', (req,res,next) => {
-    models.actuatorModel.find({ location: null }).exec((err, actuators) => {
+    models.actuatorModel.find().exec((err, actuators) => {
         if (err)
             res.send({code: 500, description: err.message});
         else

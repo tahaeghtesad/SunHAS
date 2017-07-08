@@ -8,7 +8,13 @@ const mongoose = require('../infrastructure/db-connection');
 const models = require('../model/models');
 
 router.get('/', (req,res,next) => {
-   models.locationModel.find({}, '_id').exec((err, locations) => {
+   models.locationModel.find({}).populate({
+       path: 'agents',
+       populate:{
+           path: 'states',
+           model: 'actuator'
+       }
+   }).exec((err, locations) => {
        if (err)
            res.send({code: 500, description: err.message});
        else
@@ -22,6 +28,7 @@ router.post('/', (req,res,next) => {
         description: req.body.description,
         parent: req.body.parent
     };
+
    new models.locationModel(location).save((err, location) => {
        if (err)
            res.send({code: 500, description: err.message});

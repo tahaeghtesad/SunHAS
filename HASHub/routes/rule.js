@@ -31,10 +31,10 @@ router.get('/', (req,res,next) => {
 });
 
 router.post('/', (req,res,next) => {
-    let name = req.body.name;
     let cron = req.body.cron;
     let actuator = req.body.actuator;
     let value = req.body.value;
+    let name = actuator + '-' + Date.now();
 
     console.log(`${name} ${cron} ${actuator} ${value}`);
 

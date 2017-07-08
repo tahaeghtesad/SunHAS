@@ -1,6 +1,6 @@
 /**
- * Created by tahae on 5/31/2017.
- */
+* Created by tahae on 5/31/2017.
+*/
 const mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
 

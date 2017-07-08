@@ -5,21 +5,15 @@ let mic;
 document.addEventListener('DOMContentLoaded', function (e) {
     mic = new Wit.Microphone(document.getElementById("microphone"));
     let info = function (msg) {
-        document.getElementById("info").innerHTML = msg;
     };
     let error = function (msg) {
-        document.getElementById("error").innerHTML = msg;
     };
     info("Microphone is not ready yet");
     mic.onready = function () {
-        info("Microphone is ready to record");
     };
     mic.onaudiostart = function () {
-        info("Recording started");
-        error("");
     };
     mic.onaudioend = function () {
-        info("Recording stopped, processing started");
     };
     mic.onresult = function (intent, entities, response) {
         // let r = kv("intent", intent);
@@ -50,13 +44,10 @@ document.addEventListener('DOMContentLoaded', function (e) {
         });
     };
     mic.onerror = function (err) {
-        error("Error: " + err);
     };
     mic.onconnecting = function () {
-        info("Microphone is connecting");
     };
     mic.ondisconnected = function () {
-        info("Microphone is not connected");
     };
 
     localStorage.setItem('wit_token', 'T4EWN2P2TKMG2CC5DTEZ7AMYQMY2Z53L');
@@ -74,14 +65,4 @@ document.addEventListener('DOMContentLoaded', function (e) {
         }
         return k + "=" + v + "\n";
     }
-});
-
-function changeState(s) {
-    document.getElementById('current-state').textContent = s;
-    mic.setContext({state: s});
-    responsiveVoice.speak('state set to ' + s);
-}
-document.getElementById('state-foo').addEventListener('click', function (e) {
-    e.preventDefault();
-    changeState(document.getElementById('state-input').value);
 });

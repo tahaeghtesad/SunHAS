@@ -1,0 +1,85 @@
+{{#each location}}
+    <div class="eachRoom">
+        <div class="roomHeader">
+            <h1 class="roomName text-uppercase">
+                {{name}}
+            </h1>
+            <span style="display: none;">{{_id}}</span>
+            <img src="icons/setting.png">
+        </div>
+        <div class="roomBody">
+            {{#empty agents}}
+                <h3 class="noDevicesConnected text-uppercase">No Devices Connected</h3>
+            {{/empty}}
+
+            <div class="eachDevice temp">
+                <h3 class="deviceName text-uppercase">Tempreture</h3>
+                <div class="eachOption">
+                    {{#each agents}}
+                        {{#ifeq function_ 1}}
+                            <div class="noDetails">
+                                <img src="icons/temp.png" />
+                                <h2>{{states.[states.length-1].value}}°C</h2>
+                            </div>
+                            <div class="withDetails">
+                                <img src="icons/temp.png" />
+                                <h2>{{states.[states.length-1].value}}°C</h2>
+                                <img src="icons/graph.png" class="detail" />
+                            </div>
+                        {{/ifeq}}
+                    {{/each}}
+                </div>
+            </div>
+
+            <div class="eachDevice lights">
+                <h3 class="deviceName text-uppercase">Lights</h3>
+                <div class="eachOption">
+                    <div class="noDetails">
+                        {{#each agents}}
+                            {{#ifeq function_ 5}}
+                                <!--TODO show right value-->
+                                <img src="icons/lampOff.png" />
+                                <img src="icons/lamp60.png" />
+                                <img src="icons/lamp100.png" />
+                            {{/ifeq}}
+                        {{/each}}
+                    </div>
+                    <div class="withDetails">
+                        {{#each agents}}
+                            {{#ifeq function_ 5}}
+                                <!--TODO show right value-->
+                                <img src="icons/lampOff.png" />
+                                <img src="icons/lamp60.png" />
+                                <img src="icons/lamp100.png" />
+                            {{/ifeq}}
+                        {{/each}}
+                        <div class="details">
+                            <!--TODO this should show agendas-->
+                            <div class="turn">
+                                <img src="icons/remove.png" />
+                                <h3>Turn Light</h3>
+                                <input type="number" name="lamp10" class="digit">
+                                <input type="number" name="time1" class="digit">
+                                <h3>At</h3>
+                                <input type="number" name="hour" class="digit">
+                                <input type="number" name="minute" class="digit">
+                                <input type="number" name="second" class="digit">
+                            </div>
+                            <div class="turn newScheduleForm">
+                                <img src="icons/add2.png" />
+                                <h3>Turn Light</h3>
+                                <input type="number" name="lamp10" class="digit">
+                                <input type="number" name="time1" class="digit">
+                                <h3>At</h3>
+                                <input type="number" name="hour" class="digit">
+                                <input type="number" name="minute" class="digit">
+                                <input type="number" name="second" class="digit">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <img src="icons/add.png" class="addNewDeviceBtn" />
+    </div>
+{{/each}}
