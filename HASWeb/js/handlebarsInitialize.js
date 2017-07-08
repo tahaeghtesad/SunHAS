@@ -13,3 +13,21 @@ Handlebars.registerHelper('ifeq', (a, b, options) => {
     }
     return options.inverse(this)
 });
+
+Handlebars.registerHelper('index', (array, index, property, options) => {
+    return index === -1 ? array[array.length-1][property].toString().substr(0,4) : array[index][property].toString().substr(0,4);
+});
+
+Handlebars.registerHelper('range', (object,index,value,options) => {
+    index = index === -1 ? object.length-1 : index;
+    if(object[index].value  < 33){
+
+        return `<img src="icons/lampOff.png" class="ll lampOff"/>`;
+    }
+    else if(object[index].value < 66){
+        return `<img src="icons/lamp100.png" class="ll lamp60"/>`;
+    }
+    else{
+        return `<img src="icons/lamp60.png" class="ll lamp100"/>`;
+    }
+});

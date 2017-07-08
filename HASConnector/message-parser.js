@@ -76,7 +76,7 @@ function info(msg, src){
     chipModel.findOne({cid: src}).exec((err, chip) => {
         if (chip) {
             for (let i = 0; i < chip.actuators.length; i++) {
-                model.actuatorModel.findById(chip.actuators[i]._id, (err, actuator) => {
+                model.actuatorModel.findById(chip.actuators[i], (err, actuator) => {
                     if (actuatorsInfo[actuator.actuatorKey]) {
                         actuator.states.push({
                             value: actuatorsInfo[actuator.actuatorKey],

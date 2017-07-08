@@ -5,4 +5,4 @@ socket.on('message', (data, rinfo) => {
   console.log(data);
 });
 
-socket.bind(7071);
+socket.bind(8266);

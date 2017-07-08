@@ -12,8 +12,6 @@ const mongoose = require('../infrastructure/db-connection');
 const models = require('../model/models');
 
 router.get('/:actuatorId/:value', (req, res, next) => {
-    console.log(req.params.actuatorId);
-    console.log(req.params.value);
     models.actuatorModel.findOne({ _id: req.params.actuatorId }).populate('chip').exec((err, actuator) => {
        if (err)
            res.send({code: 500, description: err.message});
@@ -26,7 +24,7 @@ router.get('/:actuatorId/:value', (req, res, next) => {
                actuator.actuatorKey,
                req.params.value
            );
-           res.send({code: 200, description: 'done'});
+           res.status(200).send({code: 200, description: 'done'});
        }
     });
 });
@@ -58,6 +56,7 @@ router.post('/', (req, res, next) => {
             }
             let message = `${action}ing ${location} lights ${action === 'turn' ? (value === 0 ? 'off' : 'on') : `to ${value} percent`}`;
             console.log(message);
+            res.status(200);
             res.send({code: 200, description: 'done', message: message});
         }
     });

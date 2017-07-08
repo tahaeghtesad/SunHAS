@@ -174,7 +174,6 @@ p,h1,h2,h3,h4,h5,h6,span,input,button,textarea,pre,a{
 	margin-top:10px;
 }
 .container .eachRoom .noDevicesConnected{
-	display: none;
 	color:white;
 	height: 100%;
 	text-align: center;
@@ -465,7 +464,13 @@ p,h1,h2,h3,h4,h5,h6,span,input,button,textarea,pre,a{
 	color: white;
 }
 
-div#microphone{
-	position: absolute;
-	right: 5px;
+#microphone{
+	position: fixed !important;
+	right: 12% !important;
+    top:5px !important;
+    width:110px !important;
+    height:120px !important;
+    padding:0 !important;
+    margin:0 !important;
+    z-index: 50;
 }

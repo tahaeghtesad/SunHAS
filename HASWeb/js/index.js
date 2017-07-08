@@ -27,11 +27,6 @@ $('body').on('click','.eachRoom .closeNewLocation',function(){
     $('.addLoc').show(200);
     $('.newLocationBtn').show(200);
 });
-
-$('body').on('click','.eachRoom .addLocation',function(){
-    console.log($('.newLocationName').val());
-    //  add she TODO vase khodet :D
-});
 $('body').on('click','.eachRoom .addNewDeviceBtn',function(){
     locationSelect = {
         name: $(this).parents('.eachRoom').find('.roomName').text(),
@@ -39,10 +34,10 @@ $('body').on('click','.eachRoom .addNewDeviceBtn',function(){
     };
     $('#newLocation').text(locationSelect.name);
     $('.addNewDevice').slideDown(300);
+    console.log(JSON.stringify(locationSelect));
 });
 $('body').on('click','.closeNewDevice',function(){
     $('.addNewDevice').slideUp(300);
-    //  add she TODO vase khodet :D
 });
 
 function setClock() {
@@ -57,12 +52,16 @@ function unAssignedDevices(){
         url: '/api/actuator',
         method: 'GET',
         success: (data) => {
-            $('#unassignedDevices').text(data.length);
+            let cunt=0;
             $('.addNewDevice ul').empty();
             $.each(data, (i, d) => {
-                if (!d.location)
-                    $('.addNewDevice ul').append(`<li class="newDeviceItem" id="${d._id}">${d.function_} - ${d._id.substr(0,5)}</li>`);
+
+                if (!d.location) {
+                    cunt++;
+                    $('.addNewDevice ul').append(`<li class="newDeviceItem" id="${d._id}">${d.function_} - ${d._id.substr(0, 5)}</li>`);
+                }
             });
+            $('#unassignedDevices').text(cunt);
         }
     });
 }
@@ -74,12 +73,9 @@ function loadLocations(){
         url:'/api/location',
         method: 'GET',
         success: (data) => {
-            console.log(data);
             $.get('js/hbs/location.hbs', function (template) {
                 let compiledTemplate = Handlebars.compile(template);
                 $('#locations').html(compiledTemplate({location: data}));
-                console.log(data);
-                console.log(data[1].agents[1].states[data[1].agents[1].states.length-1].value);
                 $.get('js/hbs/newLocation.hbs',(newLocationTemplate) => {
                     $('#locations').append(newLocationTemplate);
                 },'html');
@@ -92,6 +88,8 @@ $(document).ready(() => {
    loadLocations();
 });
 
+setInterval(loadLocations,9999);
+
 $('body').on('click', '#newLocationFormSubmit', (e) => {
     e.preventDefault();
     let name = $('input[name=location]').val();
@@ -101,14 +99,16 @@ $('body').on('click', '#newLocationFormSubmit', (e) => {
         data: {
             name: name
         },
-        success: loadLocations
+        success: () => {
+            loadLocations();
+            $('.addNewDevice').slideUp(300);
+        }
     });
 });
 
 let locationSelect;
 
 $('body').on('click', '.newDeviceItem', function(e) {
-    console.log('hi');
     $.ajax({
         url: '/api/actuator/' + $(this).attr('id'),
         method: 'PUT',
@@ -116,5 +116,50 @@ $('body').on('click', '.newDeviceItem', function(e) {
             location: locationSelect.id
         },
         success: loadLocations
+    });
+});
+$('body').on('click', '.lampOff', function(e) {
+    let id = $(this).siblings('span').html();
+    $.ajax({
+        url: '/api/action/' + id + '/'+50,
+        method: 'GET',
+        beforeSend:function(){
+        },
+        success:function(){
+            console.log('huh?');
+            $(this).attr('src','icons/lamp60.png');
+            $(this).removeClass('lampOff');
+            $(this).addClass('lamp60');
+        }
+    });
+});
+$('body').on('click', '.lamp60', function(e) {
+    let id = $(this).siblings('span').html();
+    $.ajax({
+        url: '/api/action/' + id + '/'+100,
+        method: 'GET',
+        beforeSend:function(){
+        },
+        success:function(){
+            console.log('huh?');
+            $(this).attr('src','icons/lamp100.png');
+            $(this).removeClass('lamp60');
+            $(this).addClass('lamp100');
+        }
+    });
+});
+$('body').on('click', '.lamp100', function(e) {
+    let id = $(this).siblings('span').html();
+    $.ajax({
+        url: '/api/actuator/' + id + '/'+0,
+        method: 'GET',
+        beforeSend:function(){
+        },
+        success:function(){
+            console.log('huh?');
+            $(this).attr('src','icons/lampOff.png');
+            $(this).removeClass('lamp100');
+            $(this).addClass('lampOff');
+        }
     });
 });

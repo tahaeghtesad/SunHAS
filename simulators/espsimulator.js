@@ -53,7 +53,7 @@ setTimeout(()=>{
     buffer.writeInt32BE(0, 0);
     buffer.writeInt32BE(chipId, 4);
     buffer[8] = 3; // info
-    if(count2%2){
+    if(count2%100 !== 0){
       buffer[9]=1;
       buffer.writeFloatBE(getRandomArbitrary(18,28),10);
     } else {

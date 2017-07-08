@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
         // document.getElementById("result").innerHTML = r;
 
         $.ajax({
-            url: 'http://localhost:3000/action',
+            url: 'http://localhost:3000/api/action',
             method: 'POST',
             data: {
                 response: response
