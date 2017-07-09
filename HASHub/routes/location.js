@@ -38,7 +38,7 @@ router.post('/', (req,res,next) => {
 });
 
 router.get('/:locationId', (req,res,next) => {
-    models.locationModel.find({ _id: req.params.locationId }).exec((err, location) => {
+    models.locationModel.findOne({ _id: req.params.locationId }).exec((err, location) => {
         if (err)
             res.send({code: 500, description: err.message});
         else
@@ -47,7 +47,7 @@ router.get('/:locationId', (req,res,next) => {
 });
 
 router.put('/:locationId', (req,res,next) => {
-    models.locationModel.find({ _id: req.params.locationId }).exec((err, location) => {
+    models.locationModel.findOne({ _id: req.params.locationId }).exec((err, location) => {
         if (err)
             res.send({code: 500, description: err.message});
         else {

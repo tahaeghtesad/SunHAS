@@ -16,7 +16,7 @@ router.get('/', (req,res,next) => {
 });
 
 router.get('/:actuatorId', (req,res,next) => {
-    models.actuatorModel.find({_id: req.params.actuatorId}).exec((err, actuator) => {
+    models.actuatorModel.findOne({_id: req.params.actuatorId}).exec((err, actuator) => {
         if (err)
             res.send({code: 500, description: err});
         else
