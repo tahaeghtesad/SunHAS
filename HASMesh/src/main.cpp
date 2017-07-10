@@ -101,12 +101,16 @@ void sendKeepAlive(){
     msg[7] = converted[3];
 
     msg[8] = 1;
-    msg[9] = 1; // actuator: 1
-    msg[10] = 1; // function_: 5 ~> lamp
-    msg[11] = 2; // actuator: 1
-    msg[12] = 1;// function_: 1 ~> temp
 
-    String message = String(msg).substring(0,13);
+    for (int i = 10; i < 18; i++)
+      msg[i] = 0;
+
+    msg[18] = 1; // actuator: 1
+    msg[19] = 1; // function_: 5 ~> lamp
+    msg[20] = 2; // actuator: 1
+    msg[21] = 1;// function_: 1 ~> temp
+
+    String message = String(msg).substring(0,22);
 
     mesh.sendSingle(rootChipID, message);
   }

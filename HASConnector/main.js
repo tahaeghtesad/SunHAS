@@ -52,21 +52,24 @@ espserver.on('message', (msg, rinfo) => {
     let code = msg[8];
     let message = msg.slice(9);
 
-    new logs({
-        sender: sender,
-        target: target,
-        code: code,
-        msg: message
-    }).save();
+    if (sender !== 0) {
 
-    // console.log(`received: ${JSON.stringify({
-    //     sender: sender,
-    //     target: target,
-    //     code: code,
-    //     msg: message
-    // }, null, 4)}`);
+        new logs({
+            sender: sender,
+            target: target,
+            code: code,
+            msg: message
+        }).save();
 
-    messageParser(msg.slice(8), sender, rinfo.address);
+        // console.log(`received: ${JSON.stringify({
+        //     sender: sender,
+        //     target: target,
+        //     code: code,
+        //     msg: message
+        // }, null, 4)}`);
+
+        messageParser(msg.slice(8), sender, rinfo.address);
+    }
 });
 
 function sendKeepAlive(ip) {
