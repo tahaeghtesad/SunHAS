@@ -21,6 +21,8 @@ function wifiFilter(a){
 
 function findAndConnect(cb){ //cb should send keepalive, takes target ip as argument
     console.log('scanning for wifi...');
+    WiFiControl.resetWiFi( function(err, response) {
+    if (err) console.log(err);
     WiFiControl.scanForWiFi((err, response) => {
         if (err) console.error(err);
         let networks = response.networks.filter(wifiFilter).sort(signalComparator);
@@ -38,6 +40,8 @@ function findAndConnect(cb){ //cb should send keepalive, takes target ip as argu
             }
         });
     });
+  } );
+
 }
 
 function initialize(keepAliveCB){
