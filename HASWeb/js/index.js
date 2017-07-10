@@ -4,6 +4,47 @@
 
 $('body').on('click','.roomBody .eachDevice',function(){
     var element = $(this);
+    var clickedRoomName  = element.parents('.eachRoom').find('.roomName').html().trim();
+    var i;
+    if(element.find('.deviceName').html()==='Lights') {
+        $.each(allRules, function (index, data) {
+
+            $.ajax({
+                url: '/api/actuator/' + data.data.actuator,
+                method: 'GET',
+                success: (actuator) => {
+                    $.ajax({
+                        url: '/api/location/' + actuator.location,
+                        method: 'GET',
+                        success: (location) => {
+                            if (location.name === clickedRoomName) {
+                                $.each(locationsNames, (i,d) => {
+                                    if (d.name === clickedRoomName && d.isChecked === false) {
+                                        let minute = data.repeatInterval.toString().split(' ')[0];
+                                        var hour = data.repeatInterval.toString().split(' ')[1];
+                                        var lampNumber = $("#" + data.data.actuator).parents('.withDetails').find('h2').html();
+                                        element.find('.withDetails').find('.details').append(`<div class="turn">
+                                            <img src="icons/remove.png" class="removeRule"/>
+                                            <span style="display:none">${data.name}</span>
+                                            <h3>Turn Light</h3>
+                                            <input type="number" name="lamp10" class="digit number" value="${lampNumber}">
+                                            <input type="number" name="time1" class="digit value" value="${data.data.value}">
+                                            <h3>At</h3>
+                                            <input type="number" name="hour" class="digit hour" value="${hour}">
+                                            <input type="number" name="minute" class="digit minute" value="${minute}">
+                                            </div>`
+                                        );
+                                        d.isChecked = true;
+                                    }
+
+                                });
+                            }
+                        }
+                    });
+                }
+            });
+        });
+    }
     if(element.find('.withDetails').css('display')==='none'){
         $('.eachDevice .noDetails').show(200);
         $('.eachDevice .withDetails').hide(200);
@@ -34,7 +75,6 @@ $('body').on('click','.eachRoom .addNewDeviceBtn',function(){
     };
     $('#newLocation').text(locationSelect.name);
     $('.addNewDevice').slideDown(300);
-    console.log(JSON.stringify(locationSelect));
 });
 $('body').on('click','.closeNewDevice',function(){
     $('.addNewDevice').slideUp(300);
@@ -85,10 +125,10 @@ function loadLocations(){
 }
 
 $(document).ready(() => {
-   loadLocations();
+    loadLocations();
 });
 
-setInterval(loadLocations,9999);
+// setInterval(loadLocations,9999);
 
 $('body').on('click', '#newLocationFormSubmit', (e) => {
     e.preventDefault();
@@ -126,7 +166,6 @@ $('body').on('click', '.lampOff', function(e) {
         beforeSend:function(){
         },
         success:function(){
-            console.log('huh?');
             $(this).attr('src','icons/lamp60.png');
             $(this).removeClass('lampOff');
             $(this).addClass('lamp60');
@@ -141,7 +180,6 @@ $('body').on('click', '.lamp60', function(e) {
         beforeSend:function(){
         },
         success:function(){
-            console.log('huh?');
             $(this).attr('src','icons/lamp100.png');
             $(this).removeClass('lamp60');
             $(this).addClass('lamp100');
@@ -156,10 +194,78 @@ $('body').on('click', '.lamp100', function(e) {
         beforeSend:function(){
         },
         success:function(){
-            console.log('huh?');
             $(this).attr('src','icons/lampOff.png');
             $(this).removeClass('lamp100');
             $(this).addClass('lampOff');
         }
     });
 });
+
+$(document).ready(function(){
+    getAllRules();
+    getAllLocations();
+});
+var locationsNames ;
+function getAllLocations(){
+    $.ajax({
+        url : "api/location",
+        method:"GET",
+        beforeSend:function(){
+        },
+        success:function(allLocations){
+            locationsNames = [];
+            let x;
+            for(x=0;x<allLocations.length;x++){
+                let eachLocation = {};
+                eachLocation.name = allLocations[x].name;
+                eachLocation.isChecked = false;
+                locationsNames.push(eachLocation);
+            }
+        }
+    });
+}
+var allRules;
+function getAllRules(){
+    var i ;
+    $.ajax({
+        url: "api/rule",
+        method: "GET",
+        success: function(data){
+            allRules=data;
+            for(i = 0; i<allRules.length;i++){
+
+            }
+        }
+    });
+}
+$('body').on('click','.newScheduleForm img',function(){
+    var element = $(this);
+    var parent =  element.parents('.newScheduleForm');
+    var number = parent.find('.number').val();
+    var optionId = element.parents('.withDetails').find(".lamp"+number).html();
+    var value = parent.find('.value').val();
+    var hour = parent.find('.hour').val();
+    var minute = parent.find('.minute').val();
+
+    addRule(optionId,hour,minute,value);
+});
+
+function addRule(optionId,hour,minute,value){
+
+    let cron = minute + " " + hour + " * * *";
+    let data = {
+        cron: cron,
+        actuator: optionId,
+        value: value
+    };
+
+    $.ajax({
+        url: '/api/rule',
+        method: 'POST',
+        data: data,
+        success:function(data){
+            window.alert(JSON.stringify(data) + " \ n Your new Rule just Added" );s
+            document.location.reload();
+        }
+    });
+}

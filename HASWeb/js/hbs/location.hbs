@@ -43,29 +43,20 @@
                             <div class="withDetails">
                                 {{#ifeq function_ 5}}
                                     {{#range ../states -1 'value'}}{{/range}}
-                                    <span style="display: none;">{{../_id}}</span>
+                                    <h2>{{#index_of ../../../agents ../this}}{{/index_of}}</h2>
+                                    <span style="display: none;" class="lamp{{#index_of ../../../agents ../this}}{{/index_of}}" id="{{../_id}}">{{../_id}}</span>
                                 {{/ifeq}}
                                 <div class="details">
                                     <!--TODO this should show agendas-->
-                                    <div class="turn">
-                                        <img src="icons/remove.png" />
-                                        <h3>Turn Light</h3>
-                                        <input type="number" name="lamp10" class="digit">
-                                        <input type="number" name="time1" class="digit">
-                                        <h3>At</h3>
-                                        <input type="number" name="hour" class="digit">
-                                        <input type="number" name="minute" class="digit">
-                                        <input type="number" name="second" class="digit">
-                                    </div>
+
                                     <div class="turn newScheduleForm">
                                         <img src="icons/add2.png" />
                                         <h3>Turn Light</h3>
-                                        <input type="number" name="lamp10" class="digit">
-                                        <input type="number" name="time1" class="digit">
-                                        <h3>At</h3>
-                                        <input type="number" name="hour" class="digit">
-                                        <input type="number" name="minute" class="digit">
-                                        <input type="number" name="second" class="digit">
+                                        <input type="number" name="lamp10" class="digit number">
+                                        <input type="number" name="time1" class="digit value">
+                                        <h3>% At</h3>
+                                        <input type="number" name="hour" class="digit hour">
+                                        <input type="number" name="minute" class="digit minute">
                                     </div>
                                 </div>
                             </div>

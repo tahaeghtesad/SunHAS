@@ -16,7 +16,7 @@ router.get('/', (req,res,next) => {
 });
 
 router.get('/:chipId', (req,res,next) => {
-    models.chipModel.find({ _id: req.params.chipId }).exec((err, chips) => {
+    models.chipModel.findOne({ _id: req.params.chipId }).exec((err, chips) => {
         if (err)
             res.send({code: 500, description: err.message});
         else
