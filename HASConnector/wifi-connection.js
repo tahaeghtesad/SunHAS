@@ -46,6 +46,9 @@ function findAndConnect(cb){ //cb should send keepalive, takes target ip as argu
  } );
         });
     });
+} else {
+  console.log(response.msg + '\nsending keep-alive');
+  cb('192.168.4.1'); //TODO should this be dynamic?
 }
 }
 
