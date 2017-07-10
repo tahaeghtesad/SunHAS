@@ -71,7 +71,7 @@ void receivedCallback( uint32_t from, String &msg ) {
 }
 
 void newConnectionCallback( bool adopt ) {
-  Serial.printf("startHere: New Connection, adopt=%d\n", adopt);
+  // Serial.printf("startHere: New Connection, adopt=%d\n", adopt);
 }
 
 void parseMsg(char* msg, int len){
