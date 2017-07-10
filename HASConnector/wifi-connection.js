@@ -2,7 +2,7 @@
  * Created by tahae on 7/6/2017.
  */
 const WiFiControl = require('wifi-control');
-WiFiControl.init({debug: false});
+WiFiControl.init({debug: false, connectionTimeout: 20000});
 
 const ssidPrefix = 'ArcMesh';
 const password = 'tahamesh';
