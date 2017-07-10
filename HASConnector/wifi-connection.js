@@ -22,6 +22,7 @@ function wifiFilter(a){
 let connectionCounter = 0;
 
 function findAndConnect(cb){ //cb should send keepalive, takes target ip as argument
+  if (WiFiControl.getIfaceState().success === false){
     console.log('scanning for wifi...');
     WiFiControl.scanForWiFi((err, response) => {
         if (err) console.error(err);
@@ -45,7 +46,7 @@ function findAndConnect(cb){ //cb should send keepalive, takes target ip as argu
  } );
         });
     });
-
+}
 }
 
 function initialize(keepAliveCB){
