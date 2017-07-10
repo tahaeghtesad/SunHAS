@@ -22,7 +22,7 @@ function wifiFilter(a){
 let connectionCounter = 0;
 
 function findAndConnect(cb){ //cb should send keepalive, takes target ip as argument
-  if (WiFiControl.getIfaceState().success === false){
+  if (WiFiControl.getIfaceState().connection !== 'connected'){
     console.log('scanning for wifi...');
     WiFiControl.scanForWiFi((err, response) => {
         if (err) console.error(err);
@@ -39,7 +39,7 @@ function findAndConnect(cb){ //cb should send keepalive, takes target ip as argu
                 console.log(response.msg + '\nsending keep-alive');
                 cb('192.168.4.1'); //TODO should this be dynamic?
             }
-            if (connectionCounter % 10 === 5)
+            if (connectionCounter++ % 10 === 5)
             WiFiControl.resetWiFi( function(err, response) {
    if (err) console.log(err);
    console.log(response);
