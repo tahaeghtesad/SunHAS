@@ -47,6 +47,7 @@ espserver.on('listening', () => {
 });
 
 espserver.on('message', (msg, rinfo) => {
+    console.log(msg);
     let target = msg.readUInt32BE(0);
     let sender = msg.readUInt32BE(4);
     let code = msg[8];

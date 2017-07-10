@@ -31,10 +31,11 @@ void parseMsg(char* msg, int len);
 
 uint32_t read_be_int(char* index){
   uint32_t ret = 0;
-  ret += (int)(*index + 0) << 24;
-  ret += (int)(*index + 1) << 16;
-  ret += (int)(*index + 2) << 8;
-  ret += (int)(*index + 3) << 0;
+  int a0 = index[0], a1 = index[1], a2 = index[2], a3 = index[3];
+  ret += a0 << 24;
+  ret += a1 << 16;
+  ret += a2 << 8;
+  ret += a3 << 0;
   return ret;
 }
 
@@ -54,15 +55,21 @@ char* float_to_convert = ( char* ) & input;
   converted[3] = float_to_convert[3];
 }
 
+void sendToServer(String& msg){
+  udp.beginPacket(udp.remoteIP(), udp.remotePort());
+  msg.toCharArray(incomingPacket, 255);
+
+  udp.write(incomingPacket);
+  udp.endPacket();
+}
+
 void receivedCallback( uint32_t from, String &msg ) {
   Serial.printf("startHere: Received from %d msg=%s\n", from, msg.c_str());
   msg.toCharArray(incomingPacket, 255);
   uint32_t target = read_be_int(incomingPacket);
 
   if (target == 0 && rootChipID == mesh.getChipId()){
-    udp.beginPacket(udp.remoteIP(), udp.remotePort());
-    udp.write(incomingPacket);
-    udp.endPacket();
+    sendToServer(msg);
   }
   else if (incomingPacket[8] == 1)
     rootChipID = from;
@@ -112,7 +119,10 @@ void sendKeepAlive(){
 
     String message = String(msg).substring(0,22);
 
-    mesh.sendSingle(rootChipID, message);
+    if (rootChipID == mesh.getChipId())
+      sendToServer(message);
+    else
+      mesh.sendSingle(rootChipID, message);
   }
 }
 
@@ -181,17 +191,23 @@ void loop(){
     // receive incoming UDP packets
     Serial.printf("Received %d bytes from %s, port %d\n", packet_length, udp.remoteIP().toString().c_str(), udp.remotePort());
     int len = udp.read(incomingPacket, 255);
+//    Serial.printf("%d %d %d %d\n", incomingPacket[0], incomingPacket[1], incomingPacket[2], incomingPacket[3]);
+    uint32_t target = read_be_int(incomingPacket);
+
     String msg = String(incomingPacket).substring(0,len);
 
-    uint32_t target = read_be_int(incomingPacket);
+//    Serial.println(target);
 
     if (incomingPacket[8] == 1){
       mesh.sendBroadcast( msg );
       rootChipID = mesh.getChipId();
+      Serial.println("here");
     } else if (target == mesh.getChipId()){
       parseMsg(incomingPacket + 8, len - 8);
+      Serial.println("here2");
     } else {
       mesh.sendSingle(target, msg);
+      Serial.println("here3");
     }
   }
 
