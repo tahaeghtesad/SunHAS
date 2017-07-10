@@ -5,7 +5,7 @@ const WiFiControl = require('wifi-control');
 WiFiControl.init({debug: false});
 
 const ssidPrefix = 'ArcMesh';
-const password = 'meshtaha';
+const password = 'tahamesh';
 
 function signalComparator(a, b){
     if (a.signal_level > b.signal_level)
