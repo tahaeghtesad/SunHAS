@@ -8,9 +8,9 @@ $('body').on('click','.roomBody .eachDevice',function(){
     var i;
     if(element.find('.deviceName').html()==='Lights') {
         $.each(allRules, function (index, data) {
-
+            console.log(JSON.stringify(data));
             $.ajax({
-                url: '/api/actuator/' + data.data.actuator,
+                url: '/api/actuator/' + data.data.actuatorId,
                 method: 'GET',
                 success: (actuator) => {
                     $.ajax({
@@ -21,8 +21,8 @@ $('body').on('click','.roomBody .eachDevice',function(){
                                 $.each(locationsNames, (i,d) => {
                                     if (d.name === clickedRoomName && d.isChecked === false) {
                                         let minute = data.repeatInterval.toString().split(' ')[0];
-                                        var hour = data.repeatInterval.toString().split(' ')[1];
-                                        var lampNumber = $("#" + data.data.actuator).parents('.withDetails').find('h2').html();
+                                        let hour = data.repeatInterval.toString().split(' ')[1];
+                                        let lampNumber = $("#" + data.data.actuatorId).parents('.withDetails').find('h2').html();
                                         element.find('.withDetails').find('.details').append(`<div class="turn">
                                             <img src="icons/remove.png" class="removeRule"/>
                                             <span style="display:none">${data.name}</span>
@@ -189,7 +189,7 @@ $('body').on('click', '.lamp60', function(e) {
 $('body').on('click', '.lamp100', function(e) {
     let id = $(this).siblings('span').html();
     $.ajax({
-        url: '/api/actuator/' + id + '/'+0,
+        url: '/api/action/' + id + '/'+0,
         method: 'GET',
         beforeSend:function(){
         },

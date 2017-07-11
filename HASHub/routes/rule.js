@@ -51,13 +51,20 @@ router.post('/', (req,res,next) => {
                     job.attrs.data.actuator,//actuator._id,
                     job.attrs.data.value //value
                 );
+
+                models.actuatorModel.findById(job.attrs.data.actuatorId, (err, actuator) => {
+                    actuator.states.push({value: job.attrs.data.value, time: Date.now()});
+                    actuator.save();
+                });
+
                 done();
             });
 
             let job = agenda.every(cron, name, {
+                actuatorId: actuator._id,
                 chip: actuator.chip.cid,
                 routerIp: actuator.chip.routerIp,
-                actuator: actuator._id,
+                actuator: actuator.actuatorKey,
                 value: value
             });
 

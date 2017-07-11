@@ -24,6 +24,10 @@ router.get('/:actuatorId/:value', (req, res, next) => {
                actuator.actuatorKey,
                req.params.value
            );
+
+           actuator.states.push({value: req.params.value, time: Date.now()});
+           actuator.save();
+
            res.status(200).send({code: 200, description: 'done'});
        }
     });
@@ -53,6 +57,9 @@ router.post('/', (req, res, next) => {
                     actuators[i].actuatorKey,
                     value
                 );
+
+                actuators[i].states.push({value: value, time: Date.now()});
+                actuators[i].save();
             }
             let message = `${action}ing ${location} lights ${action === 'turn' ? (value === 0 ? 'off' : 'on') : `to ${value} percent`}`;
             console.log(message);

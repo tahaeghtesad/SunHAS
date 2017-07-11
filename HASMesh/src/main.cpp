@@ -93,9 +93,10 @@ void parseMsg(char* msg, int len){
   }
 }
 
+char msg[255];
+
 void sendKeepAlive(){
   if (rootChipID != -1){
-    char msg[255];
     int_to_char_be(0);
     msg[0] = converted[0];
     msg[1] = converted[1];
@@ -119,8 +120,10 @@ void sendKeepAlive(){
 
     String message = String(msg).substring(0,22);
 
-    if (rootChipID == mesh.getChipId())
+    if (rootChipID == mesh.getChipId()){
+      Serial.println(message);
       sendToServer(message);
+    }
     else
       mesh.sendSingle(rootChipID, message);
   }
